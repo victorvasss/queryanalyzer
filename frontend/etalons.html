@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+{% block content %}
+<div style="width: 40%;">
+    <h2 style="color:rgb(17, 175, 210)">Enter your etalons</h2>
+    <form action="/add_etalon" method="post" enctype="multipart/form-data">
+        <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="text" id="text" name="text" required>
+        <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Submit</button>
+    </form>
+</div>
+{% endblock content %}
