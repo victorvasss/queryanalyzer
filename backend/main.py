@@ -9,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 
 STUDENT_DIRECTORY_PATH = "./students_sql"
 ETALON_DIRECTORY_PATH = "./etalons"
+RESULTS_DIRECTORY_PATH = "./analysis_results"
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -167,6 +168,33 @@ async def etalons_list(request: Request):
         detail="[!] Error: "+str(e)
         print(detail)
         raise HTTPException(status_code=500, detail=detail)
+    
+@app.get("/results_list", response_class=HTMLResponse)
+async def etalons_list(request: Request):
+    try:
+        files = os.listdir(RESULTS_DIRECTORY_PATH)
+        # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
+        file_url_arr = []
+        file_arr = []
+        for file in files:
+            file_url = f"/analysis_results/{file}"
+            file_url_arr.append([file_url, file])
+            #file_arr.append(file)
+        print(file_url_arr)
+        print(file_arr)
+        return templates.TemplateResponse(name='results_list.html', context={'request': request, 'result': file_url_arr, 'files': file_arr})
+    except Exception as e:
+        detail="[!] Error: "+str(e)
+        print(detail)
+        raise HTTPException(status_code=500, detail=detail)
+
+@app.get("/analysis_results/{filename}")
+async def download_file(request: Request, filename: str):
+    file_path = os.path.join(RESULTS_DIRECTORY_PATH, filename)
+    if os.path.isfile(file_path):
+        return FileResponse(path=file_path, filename=filename)
+    else:
+        raise HTTPException(status_code=404, detail="Файл не найден")
 
 @app.get("/download_student/{filename}")
 async def download_file(request: Request, filename: str):
