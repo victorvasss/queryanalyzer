@@ -2,11 +2,12 @@ import psycopg2
 import sqlparse
 import time
 import json
+import os
 
 DB_PARAMS = {
     "dbname": "course_work",
     "user": "postgres",
-    "password": "010716",
+    "password": "1qaz@WSX",
     "host": "localhost",
     "port": "5432",
     "options": "-c search_path=public"
@@ -106,6 +107,8 @@ def analyze(filename: str, reference_filename: str):
         print(f"[!] Error: {e}")
 
     # Сохраняем результаты в JSON
+    if not os.path.isfile("analysis_results"):
+        os.mkdir("analysis_results")
     result_filename = filename.replace("students_sql", "analysis_results").replace(".sql", ".json")
     with open(result_filename, "w", encoding="utf-8") as result_file:
         json.dump(analyzed_data, result_file, indent=4, ensure_ascii=False, default=convert_decimal)
