@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory='frontend')
 connection = psycopg2.connect(
     dbname="course_work",
     user="postgres",
-    password="237148",
+    password="1qaz@WSX",
     host="localhost",
     port="5432",
     options="-c search_path=public"
@@ -53,8 +53,9 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         print("[+] Success execute query")
         result = cursor.fetchall()
     except Exception as e:
-        print("[!] Error:", e)
-        raise HTTPException(status_code=500, detail="Error reading file")
+        detail="[!] Error: "+str(e)
+        print(detail)
+        raise HTTPException(status_code=500, detail=detail)
     finally:
         cursor.close()
         connection.commit()
@@ -68,8 +69,9 @@ async def submit_text(request: Request, text: str = Form(...)):
         print("[+] Success execute query")
         result = cursor.fetchall()
     except Exception as e:
-        print("[!] Error:", e)
-        raise HTTPException(status_code=500, detail="Error reading file")
+        detail="[!] Error: "+str(e)
+        print(detail)
+        raise HTTPException(status_code=500, detail=detail)
     finally:
         cursor.close()
         connection.commit()
@@ -83,8 +85,9 @@ async def submit_text(request: Request, text: str = Form(...)):
             file.write(text)
         print(f"[+] Success saved to etalons/{filename}")
     except Exception as e:
-        print("[!] Error:", e)
-        raise HTTPException(status_code=500, detail="Error reading file")
+        detail="[!] Error: "+str(e)
+        print(detail)
+        raise HTTPException(status_code=500, detail=detail)
     return templates.TemplateResponse(name='etalons.html', context={'request': request})
 
 
@@ -101,8 +104,9 @@ async def upload_result(request: Request, file: UploadFile = File(...)):
         reference="test.sql"
         queryanalyzer.analyze("students_sql/"+filename, "etalons/"+reference)
     except Exception as e:
-        print("[!] Error:", e)
-        raise HTTPException(status_code=500, detail="Error reading file")
+        detail="[!] Error: "+str(e)
+        print(detail)
+        raise HTTPException(status_code=500, detail=detail)
     return templates.TemplateResponse(name='upload_result.html', context={'request': request, 'result': content})
 
 @app.get("/answers", response_class=HTMLResponse)
@@ -120,7 +124,9 @@ async def list_files(request: Request):
         print(file_arr)
         return templates.TemplateResponse(name='answers.html', context={'request': request, 'result': file_url_arr, 'files': file_arr})
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Ошибка при получении списка файлов")
+        detail="[!] Error: "+str(e)
+        print(detail)
+        raise HTTPException(status_code=500, detail=detail)
 
 @app.get("/download/{filename}")
 async def download_file(request: Request, filename: str):

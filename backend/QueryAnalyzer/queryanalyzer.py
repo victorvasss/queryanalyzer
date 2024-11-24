@@ -5,9 +5,10 @@ import time
 DB_PARAMS = {
     "dbname": "course_work",
     "user": "postgres",
-    "password": "237148",
+    "password": "1qaz@WSX",
     "host": "localhost",
     "port": "5432",
+    "options": "-c search_path=public"
 }
 
 def analyze(filename: str, reference_filename: str):
