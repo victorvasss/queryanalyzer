@@ -17,7 +17,7 @@ templates = Jinja2Templates(directory='frontend')
 connection = psycopg2.connect(
     dbname="course_work",
     user="postgres",
-    password="1qaz@WSX",
+    password="010716",
     host="localhost",
     port="5432",
     options="-c search_path=public"
@@ -122,7 +122,7 @@ async def upload_result(request: Request, file: UploadFile = File(...)):
         with open("students_sql/"+filename, "w", encoding="utf-8") as file:
             file.write(content)
         print(f"[+] Success saved to students_sql/{filename}")
-        reference="test.sql"
+        reference="common_etalon.json"
         queryanalyzer.analyze("students_sql/"+filename, "etalons/"+reference)
     except Exception as e:
         detail="[!] Error: "+str(e)

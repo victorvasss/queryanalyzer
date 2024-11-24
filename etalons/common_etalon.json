@@ -1,1 +1,6 @@
-{"select * from categories":"description"}
+{
+    "SELECT * FROM Categories;": "Получение списка всех клиентов с их именами и электронной почтой.",
+    "SELECT name FROM Products WHERE price > 100;": "Получение списка товаров, стоимость которых превышает 100.",
+    "SELECT name FROM Products WHERE category_id IS NOT NULL ORDER BY price DESC LIMIT 3;": "Получение топ-3 самых дорогих товаров, у которых указана категория.",
+    "SELECT category_id, AVG(price) AS avg_price FROM Products GROUP BY category_id;": "Вычисление средней цены товаров в каждой категории."
+}
