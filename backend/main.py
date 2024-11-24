@@ -34,6 +34,10 @@ async def root(request: Request):
 async def root(request: Request):
     return templates.TemplateResponse(name='upload_result.html', context={'request': request})
 
+@app.get("/upload_etalon")
+async def root(request: Request):
+    return templates.TemplateResponse(name='upload_etalon.html', context={'request': request})
+
 @app.get("/console")
 async def root(request: Request):
     return templates.TemplateResponse(name='console.html', context={'request': request})
@@ -89,6 +93,22 @@ async def submit_text(request: Request, text: str = Form(...)):
         print(detail)
         raise HTTPException(status_code=500, detail=detail)
     return templates.TemplateResponse(name='etalons.html', context={'request': request})
+
+@app.post("/upload_etalon")
+async def upload_etalon(request: Request, file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        filename = file.filename
+        print("[+] File uploaded success:", filename)
+        content = contents.decode('utf-8')
+        with open("etalons/"+filename, "w", encoding="utf-8") as file:
+            file.write(content)
+        print(f"[+] Success saved to etalons/{filename}")
+    except Exception as e:
+        detail="[!] Error: "+str(e)
+        print(detail)
+        raise HTTPException(status_code=500, detail=detail)
+    return templates.TemplateResponse(name='upload_etalon.html', context={'request': request, 'result': content})
 
 
 @app.post("/upload_result")
