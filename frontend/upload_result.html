@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+<div style="width: 40%;">
+    <h2 style="color:rgb(17, 175, 210)">Upload Results</h2>
+    <form action="/upload_result" method="post" enctype="multipart/form-data">
+        <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
+        <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Upload</button>
+    </form>
+</div>
+<div style="width: 55%;">
+  {% if result %}
+      <p style="color:rgb(159, 204, 214)"> {{ result }} </p>
+  {% endif %}
+</div>
+{% endblock content %}

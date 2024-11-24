@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block content %}
+<div style="width: 40%;">
+    <h2 style="color:rgb(17, 175, 210)">Etalons in Directory</h2>
+        {% if result %}
+            {% for url, file in result %}
+                <li><a href="{{ url }}">{{ file }}</a></li>
+            {% endfor %}
+        {% endif %}
+</div>
+{% endblock content %}
