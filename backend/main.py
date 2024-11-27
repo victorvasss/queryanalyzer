@@ -1,4 +1,6 @@
+import json
 from fastapi import FastAPI, File, Request, UploadFile, HTTPException, Form
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse, HTMLResponse, RedirectResponse
 import psycopg2
@@ -10,6 +12,7 @@ from fastapi.templating import Jinja2Templates
 STUDENT_DIRECTORY_PATH = "./students_sql"
 ETALON_DIRECTORY_PATH = "./etalons"
 RESULTS_DIRECTORY_PATH = "./analysis_results"
+STUDENT_DATA_FILE = ".\\analysis_results\\test.json"
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -24,9 +27,23 @@ connection = psycopg2.connect(
     options="-c search_path=public"
 )
 
+
 @app.get("/")
 async def root(request: Request):
-    return templates.TemplateResponse(name='index.html', context={'request': request})
+    try:
+        students_data = []
+        files = os.listdir(RESULTS_DIRECTORY_PATH)
+        for file in files:
+            file = RESULTS_DIRECTORY_PATH + '/' + file
+            with open(file, 'r') as file:
+                data = json.load(file)
+                students_data.append([file.name.split('/')[2], data['total_score'], data['recommendations']])
+            print(students_data)
+
+        return templates.TemplateResponse(name='index.html', context={'request': request, 'result': students_data})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+        
 
 @app.get("/upload")
 async def root(request: Request):

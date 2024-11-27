@@ -36,10 +36,40 @@
         <div class="row" style="display: grid; place-items: center">
           <div class="col-md-8">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-              {% block content %}{% endblock %}
+              {% block content %}
+                <div style="width: 40%;">
+                  <h2 style="color:rgb(17, 175, 210)">Results Table</h2>
+                  <table class="table table-dark">
+                    <thead>
+                      <tr>
+                        <th><h2 style="color:rgb(17, 175, 210)">Student</h2></th>
+                        <th><h2 style="color:rgb(17, 175, 210)">Total Score</h2></th>
+                        <th><h2 style="color:rgb(17, 175, 210)">Recomendations</h2></th>
+                      </tr>
+                    </thead>
+                    <tbody id="student-table-body">
+                      {% if result %}
+                          {% for student, score, recomendation in result %}
+                            <tr>
+                              <td><p style="color:rgb(159, 204, 214)">{{ student }}</p></td>
+                              <td><p style="color:rgb(159, 204, 214)">{{ score }}</p></td>
+                              <td><p style="color:rgb(159, 204, 214)">{{ recomendation }}</p></td>
+                            </tr>
+                          {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+              {% endblock %}
             </div>
           </div>
         </div>
     </main>
 </body>
 </html>
+
+
+
+  <tbody id="student-table-body">
+      <!-- Данные будут добавлены сюда -->
+  </tbody>
