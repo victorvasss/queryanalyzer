@@ -1,4 +1,5 @@
 import json
+import zipfile
 from fastapi import FastAPI, File, Request, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -252,3 +253,18 @@ async def delete_answer(request: Request, text: str = Form(...)):
         return RedirectResponse(url="/answers")
     else:
         raise HTTPException(status_code=404, detail="Файл не найден")
+    
+@app.get("/upload_zip")
+async def upload_zip(request: Request):
+    try:
+        zip_file = RESULTS_DIRECTORY_PATH + "/results.zip"
+        with zipfile.ZipFile(zip_file, "w") as myzip:
+            files = os.listdir(RESULTS_DIRECTORY_PATH)
+            for file in files:
+                file = RESULTS_DIRECTORY_PATH + '/' + file
+                myzip.write(file)
+
+        return RedirectResponse(url="/results_list")
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    

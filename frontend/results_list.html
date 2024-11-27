@@ -14,5 +14,6 @@
         <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="text" id="text" name="text" required>
         <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Submit</button>
     </form>
+    <button onclick="location.href='{{ url_for('upload_zip') }}';" style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Upload to ZIP</button>
 </div>
 {% endblock content %}
