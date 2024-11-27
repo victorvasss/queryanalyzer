@@ -1,4 +1,10 @@
 python -m venv venv
 venv\Scripts\activate.bat
 в файле backend/main.py поменять значения connection на свои
+
+Запуск локально
 fastapi run backend/main.py --port 9000
+
+Запуск локально с помощью Dockerfile
+docker build -t fastapi-app .
+docker run -d -p 8888:8888 fastapi-app

@@ -1,16 +1,16 @@
 {% extends "index.html" %}
 {% block content %}
 <div style="width: 40%;">
-    <h2 style="color:rgb(17, 175, 210)">Files in Directory</h2>
-        {% if result %}
-            {% for url, file in result %}
-                <li><a href="{{ url }}">{{ file }}</a></li>
-            {% endfor %}
-        {% endif %}
+    <h2 style="color:rgb(17, 175, 210)">Etalons in Directory</h2>
+    {% if result %}
+        {% for url, file in result %}
+            <li><a href="{{ url }}">{{ file }}</a></li>
+        {% endfor %}
+    {% endif %}
 </div>
 <div style="width: 55%;">
     <h2 style="color:rgb(17, 175, 210)">Enter file to delete</h2>
-    <form action="/delete_answer" method="post" enctype="multipart/form-data">
+    <form action="/delete_etalon" method="post" enctype="multipart/form-data">
         <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="text" id="text" name="text" required>
         <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Submit</button>
     </form>
