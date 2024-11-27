@@ -7,7 +7,7 @@ import os
 DB_PARAMS = {
     "dbname": "course_work",
     "user": "postgres",
-    "password": "1qaz@WSX",
+    "password": "010716",
     "host": "localhost",
     "port": "5432",
     "options": "-c search_path=public"
@@ -20,18 +20,15 @@ def analyze(filename: str, reference_filename: str):
 
     def convert_decimal(obj):
         if isinstance(obj, Decimal):
-            return float(obj)  # Преобразуем Decimal в float
+            return float(obj)
         raise TypeError("Object of type Decimal is not JSON serializable")
 
-    # Загружаем пользовательские запросы
     with open(filename, "r", encoding="utf-8") as file:
         sql_content = file.read()
 
-    # Загружаем эталонные запросы
     with open(reference_filename, "r", encoding="utf-8") as ref_file:
         reference_data = json.load(ref_file)
 
-    # Разбираем запросы из SQL-файла пользователя
     user_queries = sqlparse.split(sql_content)
     analyzed_data = {
         "grade": "Executed",
@@ -106,7 +103,6 @@ def analyze(filename: str, reference_filename: str):
         analyzed_data["recommendations"].append(f"Database connection or execution error: {e}")
         print(f"[!] Error: {e}")
 
-    # Сохраняем результаты в JSON
     if not os.path.isfile("analysis_results"):
         os.mkdir("analysis_results")
     result_filename = filename.replace("students_sql", "analysis_results").replace(".sql", ".json")
