@@ -12,204 +12,51 @@
     <title>QueryAnalyzer</title>
 </head>
 
-<body style="background-color:#181818">
-    <!--header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-black fixed-top">
-        <div class="container">
-          <a class="navbar-brand " href="/">QueryAnalyzer</a>
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/upload">Upload File</a>
-                <a class="nav-item nav-link" href="/console">Console</a>
-                <a class="nav-item nav-link" href="/answers">Students Files</a>
-
-                <a class="nav-item nav-link" href="/upload_result">Upload Result</a>
-                <a class="nav-item nav-link" href="/results_list">Results Files</a>
-
-                <a class="nav-item nav-link" href="/upload_etalon">Upload Etalon</a>
-                <a class="nav-item nav-link" href="/etalons">Set Etalons</a>
-                <a class="nav-item nav-link" href="/etalons_list">Etalons Files</a>
-            </div>
-        </div>
-      </nav>
-    </header-->
-
-    <main role="main">
-        <div class="flex-shrink-0 p-3 bg-white" style="width:280px;">
-          <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+<body style="background-color:#181818" class="">
+    <main role="main" class="container" style="margin:0">
+      <div class="row">
+        <div class="col-sm-1 p-3 bg-dark" style="width:200px; height:100vh;">
+          <a href="/" class="d-flex align-items-center pb-3 mb-3 text-decoration-none border-bottom">
             <span class="fs-5 fw-semibold">QueryAnalyzer</span>
           </a>
           <ul class="list-unstyled ps-0">
             <li class="mb-1">
-              <button class="btn btn-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#target">Collapse</button>
-              <div class="collapse" id="target">
+              <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#query">Console</button>
+              <div class="collapse" id="query">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                  <li><a href="#" class="link-dark rounded">TEST</a></li>
+                  <li><a href="/upload" class="rounded">Upload file</a></li>
+                  <li><a href="/console" class="rounded">Console</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mb-1">
+              <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#etalons">Etalons</button>
+              <div class="collapse" id="etalons">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="/upload_etalon" class="rounded">Upload Etalon</a></li>
+                  <li><a href="/etalons" class="rounded">Set Etalons</a></li>
+                  <li><a href="/etalons_list" class="rounded">Etalons Files</a></li>
+                </ul>
+              </div>
+            </li>
+            <li class="mb-1">
+              <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#results">Students Results</button>
+              <div class="collapse" id="results">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="/upload_result" class="rounded">Upload Results</a></li>
+                  <li><a href="/results_list" class="rounded">Results Files</a></li>
+                  <li><a href="/answers" class="rounded">Students Files</a></li>
                 </ul>
               </div>
             </li>
           </ul>
         </div>
 
-
-
-<!--div class="container-fluid">
-    <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-5 d-none d-sm-inline">Menu</span>
-                </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                        <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
-                    </li>
-                    <li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span> </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 2</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 3</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 4</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
-                    </li>
-                </ul>
-                <hr>
-                <div class="dropdown pb-4">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                        <span class="d-none d-sm-inline mx-1">loser</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col py-3">
-            Content area...
-        </div>
-    </div>
-</div-->
-
-
-
-<!--div class="nav-side-menu">
-  <div class="brand">Press Curing Control</div>
-  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
-
-      <div class="menu-list">
-
-          <ul id="menu-content" class="menu-content collapse out">
-              <li>
-                <a href="#">
-                <i class="fa fa-dashboard fa-lg"></i> Dashboard
-                </a>
-              </li>
-
-              <li  data-toggle="collapse" data-target="#products" class="collapsed active">
-                <a href="#"><i class="fa fa-gift fa-lg"></i> Anlagenauswahl <span class="arrow"></span></a>
-              </li>
-              <ul class="sub-menu collapse" id="products">
-                  <li class="active"><a href="#">RFT-H1</a></li>
-                  <li><a href="#">RFT-H2</a></li>
-                  <li><a href="#">BTB-H1</a></li>
-                  <li><a href="#">BTB-H2</a></li>
-              </ul>
-
-
-              <li data-toggle="collapse" data-target="#service" class="collapsed">
-                <a href="#"><i class="fa fa-globe fa-lg"></i> Auswertungen <span class="arrow"></span></a>
-              </li>  
-              <ul class="sub-menu collapse" id="service">
-                <li>Trendmonitoring</li>
-                <li>Alarmmonitoring</li>
-                <li>Audit-Trail</li>
-              </ul>
-
-
-              <li data-toggle="collapse" data-target="#new" class="collapsed">
-                <a href="#"><i class="fa fa-car fa-lg"></i> Reporting <span class="arrow"></span></a>
-              </li>
-              <ul class="sub-menu collapse" id="new">
-                <li>Alarmstatistik</li>
-                <li>Prozessfähigkeit</li>
-              </ul>
-
-
-               <li>
-                <a href="#">
-                <i class="fa fa-user fa-lg"></i> Profile
-                </a>
-                </li>
-
-               <li data-toggle="collapse" data-target="#new" class="collapsed">
-                <a href="#"><i class="fa fa-car fa-lg"></i> Service <span class="arrow"></span></a>
-              </li>
-              <ul class="sub-menu collapse" id="new">
-                <li>Sensorkonfiguration</li>
-                <li>Betriebsarten</li>
-              </ul>
-
-          </ul>
-   </div>
-</div-->
-
-
-
-        <div class="row" style="display: grid; place-items: center">
+        <div class="row col-sm" style="display: grid; place-items: center">
           <div class="col-md-8">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
               {% block content %}
-                <div style="width: 40%;">
+                <!--div style="width: 40%;">
                   <h2 style="color:rgb(17, 175, 210)">Results Table</h2>
                   <table class="table table-dark">
                     <thead>
@@ -231,11 +78,12 @@
                       {% endif %}
                     </tbody>
                   </table>
-                </div>
+                </div-->
               {% endblock %}
             </div>
           </div>
         </div>
+      </div>
     </main>
 </body>
 </html>
