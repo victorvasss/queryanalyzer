@@ -20,15 +20,7 @@
             <span class="fs-5 fw-semibold">QueryAnalyzer</span>
           </a>
           <ul class="list-unstyled ps-0">
-            <li class="mb-1">
-              <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#query">Console</button>
-              <div class="collapse" id="query">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                  <li><a href="/upload" class="rounded">Upload file</a></li>
-                  <li><a href="/console" class="rounded">Console</a></li>
-                </ul>
-              </div>
-            </li>
+            <li><a href="/upload" class="btn btn-toggle align-items-center rounded">Console</a></li>
             <li class="mb-1">
               <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#etalons">Etalons</button>
               <div class="collapse" id="etalons">
@@ -56,29 +48,6 @@
           <div class="col-md-8">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
               {% block content %}
-                <!--div style="width: 40%;">
-                  <h2 style="color:rgb(17, 175, 210)">Results Table</h2>
-                  <table class="table table-dark">
-                    <thead>
-                      <tr>
-                        <th><h2 style="color:rgb(17, 175, 210)">Student</h2></th>
-                        <th><h2 style="color:rgb(17, 175, 210)">Total Score</h2></th>
-                        <th><h2 style="color:rgb(17, 175, 210)">Recomendations</h2></th>
-                      </tr>
-                    </thead>
-                    <tbody id="student-table-body">
-                      {% if result %}
-                          {% for student, score, recomendation in result %}
-                            <tr>
-                              <td><p style="color:rgb(159, 204, 214)">{{ student }}</p></td>
-                              <td><p style="color:rgb(159, 204, 214)">{{ score }}</p></td>
-                              <td><p style="color:rgb(159, 204, 214)">{{ recomendation }}</p></td>
-                            </tr>
-                          {% endfor %}
-                      {% endif %}
-                    </tbody>
-                  </table>
-                </div-->
               {% endblock %}
             </div>
           </div>

@@ -99,7 +99,7 @@ async def submit_text(request: Request, text: str = Form(...)):
     finally:
         cursor.close()
         connection.commit()
-    return templates.TemplateResponse(name='console.html', context={'request': request, 'result': result})
+    return templates.TemplateResponse(name='upload.html', context={'request': request, 'result': result})
 
 @app.post("/add_etalon")
 async def submit_text(request: Request, text: str = Form(...)):
