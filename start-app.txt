@@ -4,7 +4,9 @@ venv\Scripts\activate.bat
 
 Запуск локально
 fastapi run backend/main.py --port 9000
+http://localhost:9000 - поднятый сайт
 
 Запуск локально с помощью Dockerfile
 docker build -t fastapi-app .
 docker run -d -p 8888:8888 fastapi-app
+http://localhost:8888 - поднятый сайт
