@@ -11,7 +11,7 @@
     <div class="mb-3">
       <h2 style="color:rgb(17, 175, 210)">Enter your query</h2>
       <textarea 
-            class="btn btn-outline-info form-control" 
+            class="btn-outline-info form-control" 
             id="text" 
             name="text" 
             rows="3"
@@ -22,49 +22,34 @@
   </form>
 
 </div>
-<div style="width: 55%; padding-left: 20px;">
-  <table id="example" class="table table-dark table-striped">
+<div style="width: 55%; padding-left: 20px; color:rgb(17, 175, 210);">
+  <table id="res" class="table table-dark table-striped" style="width:100%;">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Position</th>
-        <th>Office</th>
-        <th>Age</th>
-        <th>Start date</th>
-        <th>Salary</th>
+        {% if attr %}
+        {% for col in attr %}
+          <th><p style="color:rgb(17, 175, 210)">{{ col }}</h2></th>
+        {% endfor %}
+        {% endif %}
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>tiger</td>
-        <td>System Architect</td>
-        <th>Edinburgh</th>
-        <th>61</th>
-        <th>2011/04/25</th>
-        <th>$320.800</th>
-      </tr>
-      <tr>
-        <td>tiger1</td>
-        <td>System Architect1</td>
-        <th>Edinburgh1</th>
-        <th>611</th>
-        <th>2011/04/251</th>
-        <th>$320.8001</th>
-      </tr>
+      {% if result %}
+      {% for row in result %}
+        <tr>
+          {% for col in row %}
+            <td><p style="color:rgb(159, 204, 214)">{{ col }}</p></td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      {% endif %}
     </tbody>
   </table>
   <script>
-    new DataTable('#example');
+    new DataTable('#res');
     $(document).ready(function() {
-        $('#example').DataTable();
+        $('#res').DataTable();
     });
   </script>
-
-
-{% if result %}
-  {% for row in result %}
-   <!--p style="color:rgb(159, 204, 214)"> {{ row }} </p-->
-  {% endfor %}
-{% endif %}
 </div>
 {% endblock content %}

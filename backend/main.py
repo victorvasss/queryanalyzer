@@ -75,6 +75,7 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         cursor = connection.cursor()
         cursor.execute(content)
         print("[+] Success execute query")
+        attrs = [description[0] for description in cursor.description] 
         result = cursor.fetchall()
     except Exception as e:
         detail="[!] Error: "+str(e)
@@ -83,7 +84,7 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     finally:
         cursor.close()
         connection.commit()
-    return templates.TemplateResponse(name='upload.html', context={'request': request, 'result': result})
+    return templates.TemplateResponse(name='upload.html', context={'request': request, 'attr':attrs, 'result': result})
 
 @app.post("/submit_text")
 async def submit_text(request: Request, text: str = Form(...)):
@@ -91,6 +92,7 @@ async def submit_text(request: Request, text: str = Form(...)):
         cursor = connection.cursor()
         cursor.execute(text)
         print("[+] Success execute query")
+        attrs = [description[0] for description in cursor.description] 
         result = cursor.fetchall()
     except Exception as e:
         detail="[!] Error: "+str(e)
@@ -99,7 +101,7 @@ async def submit_text(request: Request, text: str = Form(...)):
     finally:
         cursor.close()
         connection.commit()
-    return templates.TemplateResponse(name='upload.html', context={'request': request, 'result': result})
+    return templates.TemplateResponse(name='upload.html', context={'request': request, 'attr':attrs, 'result': result})
 
 @app.post("/add_etalon")
 async def submit_text(request: Request, text: str = Form(...)):
