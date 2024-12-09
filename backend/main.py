@@ -22,7 +22,7 @@ templates = Jinja2Templates(directory='frontend')
 connection = psycopg2.connect(
     dbname="course_work",
     user="postgres",
-    password="237148",
+    password="1qaz@WSX",
     host="localhost",
     port="5432",
     options="-c search_path=public"
@@ -143,6 +143,7 @@ async def upload_result(request: Request, file: UploadFile = File(...)):
         with open("students_sql/"+filename, "w", encoding="utf-8") as file:
             file.write(content)
         print(f"[+] Success saved to students_sql/{filename}")
+        # TODO: имя эталона захардкожено... нужно добавить возможность его выбирать
         reference="common_etalon.json"
         queryanalyzer.analyze("students_sql/"+filename, "etalons/"+reference)
     except Exception as e:
@@ -270,3 +271,49 @@ async def upload_zip(request: Request):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
+@app.get("/get_parsed_etalons")
+async def get_pased_etalons(request: Request):
+    files = os.listdir(ETALON_DIRECTORY_PATH)
+    # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
+    etalons_dict = {"etalons":[]}
+    for file in files:
+        reference_data = {}
+        with open(ETALON_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
+            reference_data = json.load(ref_file)
+        for el in reference_data:
+            parsed_etalon = {}
+            parsed_etalon["etalon"] = el
+            parsed_etalon["description"] = reference_data[el]
+            parsed_etalon["file_name"] = file
+            file_url = f"/download_etalon/{file}"
+            parsed_etalon["download_link"] = file_url
+            file_url = f"/delete_etalon_via_link/{file}"
+            parsed_etalon["delete_link"] = file_url
+            etalons_dict["etalons"].append(parsed_etalon)
+    return etalons_dict
+
+@app.get("/get_parsed_results")
+async def get_parsed_results(request: Request):
+    files = os.listdir(RESULTS_DIRECTORY_PATH)
+    # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
+    results_dict = {"results":[]}
+    for file in files:
+        results = {}
+        with open(RESULTS_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
+            results = json.load(ref_file)
+        parsed_etalon = results
+        for el in parsed_etalon["checks"]:
+            del el["query_result"]
+            del el["reference_result"]
+        parsed_etalon["filename"] = file
+        results_dict["results"].append(parsed_etalon)
+    return results_dict
+        
+@app.get("/delete_etalon_via_link/{filename}")
+async def delete_etalon_via_link(request: Request, filename: str):
+    file_path = os.path.join(ETALON_DIRECTORY_PATH, filename)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+        return RedirectResponse(url="/etalons_list")
+    else:
+        raise HTTPException(status_code=404, detail="Файл не найден")

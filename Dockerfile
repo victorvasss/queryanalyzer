@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN service postgresql start && \
     sleep 5 && \
-    su postgres -c "psql -c \"ALTER USER postgres WITH PASSWORD '237148';\"" && \
+    su postgres -c "psql -c \"ALTER USER postgres WITH PASSWORD '1qaz@WSX';\"" && \
     su postgres -c "psql -c \"CREATE DATABASE course_work;\""
 
 COPY ./requirements.txt requirements.txt

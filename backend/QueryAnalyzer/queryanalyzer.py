@@ -7,7 +7,7 @@ import os
 DB_PARAMS = {
     "dbname": "course_work",
     "user": "postgres",
-    "password": "237148",
+    "password": "1qaz@WSX",
     "host": "localhost",
     "port": "5432",
     "options": "-c search_path=public"
@@ -91,7 +91,7 @@ def analyze(filename: str, reference_filename: str):
 
                 analyzed_data["checks"].append(check_result)
                 analyzed_data["total_score"] += query_score
-                # print(f"[DEBUG] Check result: {check_result}")
+                #print(f"[DEBUG] Check result: {check_result}")
             except Exception as query_error:
                 analyzed_data["recommendations"].append(
                     f"Error executing query: {query_error} for {description}"
@@ -106,8 +106,9 @@ def analyze(filename: str, reference_filename: str):
         analyzed_data["recommendations"].append(f"Database connection or execution error: {e}")
         print(f"[!] Error: {e}")
 
+    print("[INFO] Finished analyze")
     # Сохраняем результаты в JSON
-    if not os.path.isfile("analysis_results"):
+    if not os.path.isdir("analysis_results"):
         os.mkdir("analysis_results")
     result_filename = filename.replace("students_sql", "analysis_results").replace(".sql", ".json")
     with open(result_filename, "w", encoding="utf-8") as result_file:
