@@ -1,6 +1,0 @@
-{
-    "select * from categories":"descr1",
-    "select * from customers":"descr2",
-    "select * from orders":"descr3",
-    "select * from products":"descr4"
-}

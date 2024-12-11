@@ -1,29 +1,20 @@
 {% extends "index.html" %}
 {% block content %}
-
-<div style="width: 40%;">
+<div style="padding: 20px; color:rgb(17, 175, 210);">
   <h2 style="color:rgb(17, 175, 210)">Upload a File</h2>
   <form action="/uploadfile" method="post" enctype="multipart/form-data">
       <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
       <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Upload</button>
   </form>
-  <form action="/submit_text" method="post" enctype="multipart/form-data">
+  <form style="padding-top:20px; padding-bottom:20px;" action="/submit_text" method="post" enctype="multipart/form-data">
     <div class="mb-3">
       <h2 style="color:rgb(17, 175, 210)">Enter your query</h2>
-      <textarea 
-            class="btn-outline-info form-control" 
-            id="text" 
-            name="text" 
-            rows="3"
-            required
-        ></textarea>
+      <textarea class="btn-outline-info form-control" id="text" name="text" rows="3"required></textarea>
     </div>
     <button type="submit" class="btn btn-outline-info">Отправить</button>
   </form>
-
-</div>
-<div style="width: 55%; padding-left: 20px; color:rgb(17, 175, 210);">
-  <table id="res" class="table table-dark table-striped" style="width:100%;">
+  
+  <table id="res" class="table table-dark table-striped">
     <thead>
       <tr>
         {% if attr %}

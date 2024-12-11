@@ -62,9 +62,9 @@ async def root(request: Request):
 async def root(request: Request):
     return templates.TemplateResponse(name='console.html', context={'request': request})
 
-@app.get("/etalons")
-async def root(request: Request):
-    return templates.TemplateResponse(name='etalons.html', context={'request': request})
+#@app.get("/etalons")
+#async def root(request: Request):
+#    return templates.TemplateResponse(name='etalons.html', context={'request': request})
 
 @app.post("/uploadfile")
 async def upload_file(request: Request, file: UploadFile = File(...)):
@@ -214,9 +214,9 @@ async def download_file(request: Request, filename: str):
     else:
         raise HTTPException(status_code=404, detail="Файл не найден")
 
-@app.get("/download_student/{filename}")
+@app.get("/download_result/{filename}")
 async def download_file(request: Request, filename: str):
-    file_path = os.path.join(STUDENT_DIRECTORY_PATH, filename)
+    file_path = os.path.join(RESULTS_DIRECTORY_PATH, filename)
     if os.path.isfile(file_path):
         return FileResponse(path=file_path, filename=filename)
     else:
@@ -235,7 +235,7 @@ async def delete_etalon(request: Request, text: str = Form(...)):
     file_path = os.path.join(ETALON_DIRECTORY_PATH, text)
     if os.path.isfile(file_path):
         os.remove(file_path)        
-        return RedirectResponse(url="/etalons_list")
+        return RedirectResponse(url="/get_parsed_results")
     else:
         raise HTTPException(status_code=404, detail="Файл не найден")
 
@@ -271,49 +271,67 @@ async def upload_zip(request: Request):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
-@app.get("/get_parsed_etalons")
+@app.get("/etalons")
 async def get_pased_etalons(request: Request):
     files = os.listdir(ETALON_DIRECTORY_PATH)
     # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-    etalons_dict = {"etalons":[]}
+    etalons_head = ['etalon', 'description', 'file_name', 'download_link', 'delete_link']
+    etalons_list = []
     for file in files:
         reference_data = {}
         with open(ETALON_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
             reference_data = json.load(ref_file)
         for el in reference_data:
-            parsed_etalon = {}
-            parsed_etalon["etalon"] = el
-            parsed_etalon["description"] = reference_data[el]
-            parsed_etalon["file_name"] = file
+            parsed_etalon = []
+            parsed_etalon.append(el)
+            parsed_etalon.append(reference_data[el])
+            parsed_etalon.append(file)
             file_url = f"/download_etalon/{file}"
-            parsed_etalon["download_link"] = file_url
+            parsed_etalon.append(file_url)
             file_url = f"/delete_etalon_via_link/{file}"
-            parsed_etalon["delete_link"] = file_url
-            etalons_dict["etalons"].append(parsed_etalon)
-    return etalons_dict
+            parsed_etalon.append(file_url)
+            etalons_list.append(parsed_etalon)
+    return templates.TemplateResponse(name='etalons.html', context={'request': request, 'heads': etalons_head, 'etalons': etalons_list})
 
-@app.get("/get_parsed_results")
+@app.get("/results")
 async def get_parsed_results(request: Request):
     files = os.listdir(RESULTS_DIRECTORY_PATH)
     # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-    results_dict = {"results":[]}
+    results_head = ['filename', 'grade', 'recommendations', 'total_score', 'checks', 'download_link', 'delete_link']
+    results_list = []
     for file in files:
-        results = {}
         with open(RESULTS_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
+            parsed_results = [file]
+            results = {}
             results = json.load(ref_file)
-        parsed_etalon = results
-        for el in parsed_etalon["checks"]:
-            del el["query_result"]
-            del el["reference_result"]
-        parsed_etalon["filename"] = file
-        results_dict["results"].append(parsed_etalon)
-    return results_dict
+            for el in results:
+                parsed_results.append(str(results[el]))
+            file_url = f"/download_result/{file}"
+            parsed_results.append(file_url)
+            file_url = f"/delete_result_via_link/{file}"
+            parsed_results.append(file_url)
+            results_list.append(parsed_results)
+    return templates.TemplateResponse(name='results_list.html', context={'request': request, 'heads': results_head, 'results_list': results_list})
         
 @app.get("/delete_etalon_via_link/{filename}")
 async def delete_etalon_via_link(request: Request, filename: str):
     file_path = os.path.join(ETALON_DIRECTORY_PATH, filename)
     if os.path.isfile(file_path):
         os.remove(file_path)
-        return RedirectResponse(url="/etalons_list")
+        return RedirectResponse(url="/etalons")
+    else:
+        raise HTTPException(status_code=404, detail="Файл не найден") 
+        
+@app.get("/delete_result_via_link/{filename}")
+async def delete_result_via_link(request: Request, filename: str):
+    file_path = os.path.join(RESULTS_DIRECTORY_PATH, filename)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
     else:
         raise HTTPException(status_code=404, detail="Файл не найден")
+    file_path = os.path.join(STUDENT_DIRECTORY_PATH, filename.replace('.json', '.sql'))
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+    else:
+        raise HTTPException(status_code=404, detail="Файл не найден")
+    return RedirectResponse(url="/results")

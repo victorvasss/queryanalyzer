@@ -1,10 +1,42 @@
 {% extends "index.html" %}
 {% block content %}
-<div style="width: 40%;">
-    <h2 style="color:rgb(17, 175, 210)">Enter your etalons</h2>
-    <form action="/add_etalon" method="post" enctype="multipart/form-data">
-        <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="text" id="text" name="text" required>
-        <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Submit</button>
-    </form>
+<div style="padding:20px; color:rgb(17, 175, 210);">
+  <h2 style="color:rgb(17, 175, 210)">Upload Etalon</h2>
+  <form style="padding-bottom:10px;" action="/upload_etalon" method="post" enctype="multipart/form-data">
+      <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
+      <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Upload</button>
+  </form>
+  <table id="res" class="table table-dark table-striped">
+    <thead>
+    <tr>
+      {% if heads %}
+      {% for head in heads %}
+        <th><p style="color:rgb(17, 175, 210)">{{ head }}</h2></th>
+      {% endfor %}
+      {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+      {% if etalons %}
+      {% for etalon in etalons %}
+        <tr>
+          {% for el in etalon %}
+            {% if '/' not in el %}
+              <td><p style="color:rgb(159, 204, 214)">{{ el }}</p></td>
+            {% else %}
+              <td><a href="{{ el }}" class="btn btn-toggle align-items-center rounded">BTN</a></td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+  <script>
+    new DataTable('#res');
+    $(document).ready(function() {
+        $('#res').DataTable();
+    });
+  </script>
 </div>
 {% endblock content %}
