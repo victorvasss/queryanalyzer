@@ -22,7 +22,7 @@ templates = Jinja2Templates(directory='frontend')
 connection = psycopg2.connect(
     dbname="course_work",
     user="postgres",
-    password="1qaz@WSX",
+    password="237148",
     host="localhost",
     port="5432",
     options="-c search_path=public"
