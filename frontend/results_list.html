@@ -2,9 +2,9 @@
 {% block content %}
 <div style="padding:20px; color:rgb(17, 175, 210);">
   <h2 style="color:rgb(17, 175, 210)">Upload Results</h2>
-    <form action="/upload_result" method="post" enctype="multipart/form-data">
-      <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
-      <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Upload</button>
+  <form style="padding-bottom:10px;" action="/upload_result" method="post" enctype="multipart/form-data">
+    <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
+    <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Upload</button>
   </form>
   <table id="res" class="table table-dark table-striped">
     <thead>

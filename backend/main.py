@@ -297,13 +297,15 @@ async def get_pased_etalons(request: Request):
 async def get_parsed_results(request: Request):
     files = os.listdir(RESULTS_DIRECTORY_PATH)
     # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-    results_head = ['filename', 'grade', 'recommendations', 'total_score', 'checks', 'download_link', 'delete_link']
+    results_head = ['filename', 'grade', 'total_score', 'download_link', 'delete_link']
     results_list = []
     for file in files:
         with open(RESULTS_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
             parsed_results = [file]
             results = {}
             results = json.load(ref_file)
+            del results['checks']
+            del results['recommendations']
             for el in results:
                 parsed_results.append(str(results[el]))
             file_url = f"/download_result/{file}"
