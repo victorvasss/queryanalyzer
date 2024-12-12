@@ -1,10 +1,10 @@
 {% extends "index.html" %}
 {% block content %}
 <div style="padding:20px; color:rgb(17, 175, 210);">
-  <h2 style="color:rgb(17, 175, 210)">Upload Etalon</h2>
+  <h2 style="color:rgb(17, 175, 210)">Загрузить эталоны</h2>
   <form style="padding-bottom:10px;" action="/upload_etalon" method="post" enctype="multipart/form-data">
       <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
-      <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Upload</button>
+      <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Загрузить</button>
   </form>
   <table id="res" class="table table-dark table-striped">
     <thead>
@@ -33,7 +33,32 @@
     </tbody>
   </table>
   <script>
-    new DataTable('#res');
+    new DataTable('#res', {
+      language: {
+        "decimal":        "",
+        "emptyTable":     "Данные в таблице отсутствуют",
+        "info":           "Отображение от _START_ до _END_ _TOTAL_ количества записей",
+        "infoEmpty":      "Отображение от 0 до 0 из 0 записей",
+        "infoFiltered":   "(filtered from _MAX_ total entries)",
+        "infoPostFix":    "",
+        "thousands":      ",",
+        "lengthMenu":     "Показывать записи _MENU_",
+        "loadingRecords": "Загрузка...",
+        "processing":     "",
+        "search":         "Поиск:",
+        "zeroRecords":    "Совпадающих записей не найдено",
+        "paginate": {
+            "first":      "Первый",
+            "last":       "Последний",
+            "next":       "Следующий",
+            "previous":   "Предыдущий"
+        },
+        "aria": {
+            "orderable":  "Упорядочивать по этой колонке",
+            "orderableReverse": "Расположить этот столбец в обратном порядке"
+        }
+      }
+    });
     $(document).ready(function() {
         $('#res').DataTable();
     });

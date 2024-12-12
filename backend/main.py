@@ -275,7 +275,7 @@ async def upload_zip(request: Request):
 async def get_pased_etalons(request: Request):
     files = os.listdir(ETALON_DIRECTORY_PATH)
     # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-    etalons_head = ['etalon', 'description', 'file_name', 'download_link', 'delete_link']
+    etalons_head = ['Эталон', 'Описание', 'Название файла', 'Скачать', 'Удалить']
     etalons_list = []
     for file in files:
         reference_data = {}
@@ -297,7 +297,7 @@ async def get_pased_etalons(request: Request):
 async def get_parsed_results(request: Request):
     files = os.listdir(RESULTS_DIRECTORY_PATH)
     # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-    results_head = ['filename', 'grade', 'total_score', 'download_link', 'delete_link']
+    results_head = ['Имя файла', 'Уровень', 'Количество баллов', 'Скачать', 'Удалить']
     results_list = []
     for file in files:
         with open(RESULTS_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
