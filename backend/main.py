@@ -28,43 +28,11 @@ connection = psycopg2.connect(
     options="-c search_path=public"
 )
 
-
-@app.get("/")
-async def root(request: Request):
-    try:
-        students_data = []
-        files = os.listdir(RESULTS_DIRECTORY_PATH)
-        for file in files:
-            file = RESULTS_DIRECTORY_PATH + '/' + file
-            with open(file, 'r') as file:
-                data = json.load(file)
-                students_data.append([file.name.split('/')[2], data['total_score'], data['recommendations']])
-            print(students_data)
-
-        return templates.TemplateResponse(name='index.html', context={'request': request, 'result': students_data})
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
         
-
+@app.get("/")
 @app.get("/upload")
 async def root(request: Request):
     return templates.TemplateResponse(name='upload.html', context={'request': request})
-
-@app.get("/upload_result")
-async def root(request: Request):
-    return templates.TemplateResponse(name='upload_result.html', context={'request': request})
-
-@app.get("/upload_etalon")
-async def root(request: Request):
-    return templates.TemplateResponse(name='upload_etalon.html', context={'request': request})
-
-@app.get("/console")
-async def root(request: Request):
-    return templates.TemplateResponse(name='console.html', context={'request': request})
-
-#@app.get("/etalons")
-#async def root(request: Request):
-#    return templates.TemplateResponse(name='etalons.html', context={'request': request})
 
 @app.post("/uploadfile")
 async def upload_file(request: Request, file: UploadFile = File(...)):
@@ -103,19 +71,6 @@ async def submit_text(request: Request, text: str = Form(...)):
         connection.commit()
     return templates.TemplateResponse(name='upload.html', context={'request': request, 'attr':attrs, 'result': result})
 
-@app.post("/add_etalon")
-async def submit_text(request: Request, text: str = Form(...)):
-    try:
-        filename = "common_etalon.json"
-        with open("etalons/"+filename, "w", encoding="utf-8") as file:
-            file.write(text)
-        print(f"[+] Success saved to etalons/{filename}")
-    except Exception as e:
-        detail="[!] Error: "+str(e)
-        print(detail)
-        raise HTTPException(status_code=500, detail=detail)
-    return templates.TemplateResponse(name='etalons.html', context={'request': request})
-
 @app.post("/upload_etalon")
 async def upload_etalon(request: Request, file: UploadFile = File(...)):
     try:
@@ -129,9 +84,8 @@ async def upload_etalon(request: Request, file: UploadFile = File(...)):
     except Exception as e:
         detail="[!] Error: "+str(e)
         print(detail)
-        raise HTTPException(status_code=500, detail=detail)
-    return templates.TemplateResponse(name='upload_etalon.html', context={'request': request, 'result': content})
-
+        raise HTTPException(status_code=500, detail=detail)    
+    return RedirectResponse(url="/etalons")
 
 @app.post("/upload_result")
 async def upload_result(request: Request, file: UploadFile = File(...)):
@@ -150,44 +104,8 @@ async def upload_result(request: Request, file: UploadFile = File(...)):
         detail="[!] Error: "+str(e)
         print(detail)
         raise HTTPException(status_code=500, detail=detail)
-    return templates.TemplateResponse(name='upload_result.html', context={'request': request, 'result': content})
+    return RedirectResponse(url="/results")
 
-@app.post("/answers")
-@app.get("/answers", response_class=HTMLResponse)
-async def list_files(request: Request):
-    try:
-        files = os.listdir(STUDENT_DIRECTORY_PATH)
-        # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-        file_url_arr = []
-        file_arr = []
-        for file in files:
-            file_url = f"/download_student/{file}"
-            file_url_arr.append([file_url, file])
-            #file_arr.append(file)
-        return templates.TemplateResponse(name='answers.html', context={'request': request, 'result': file_url_arr, 'files': file_arr})
-    except Exception as e:
-        detail="[!] Error: "+str(e)
-        print(detail)
-        raise HTTPException(status_code=500, detail=detail)
-
-@app.post("/etalons_list")
-@app.get("/etalons_list", response_class=HTMLResponse)
-async def etalons_list(request: Request):
-    try:
-        files = os.listdir(ETALON_DIRECTORY_PATH)
-        # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-        file_url_arr = []
-        file_arr = []
-        for file in files:
-            file_url = f"/download_etalon/{file}"
-            file_url_arr.append([file_url, file])
-            #file_arr.append(file)
-        return templates.TemplateResponse(name='etalons_list.html', context={'request': request, 'result': file_url_arr, 'files': file_arr})
-    except Exception as e:
-        detail="[!] Error: "+str(e)
-        print(detail)
-        raise HTTPException(status_code=500, detail=detail)
-    
 @app.post("/results_list")
 @app.get("/results_list", response_class=HTMLResponse)
 async def etalons_list(request: Request):
@@ -230,47 +148,7 @@ async def download_file(request: Request, filename: str):
     else:
         raise HTTPException(status_code=404, detail="Файл не найден")
     
-@app.post("/delete_etalon/")
-async def delete_etalon(request: Request, text: str = Form(...)):
-    file_path = os.path.join(ETALON_DIRECTORY_PATH, text)
-    if os.path.isfile(file_path):
-        os.remove(file_path)        
-        return RedirectResponse(url="/get_parsed_results")
-    else:
-        raise HTTPException(status_code=404, detail="Файл не найден")
-
-@app.post("/delete_result/")
-async def delete_result(request: Request, text: str = Form(...)):
-    file_path = os.path.join(RESULTS_DIRECTORY_PATH, text)
-    if os.path.isfile(file_path):
-        os.remove(file_path)        
-        return RedirectResponse(url="/results_list")
-    else:
-        raise HTTPException(status_code=404, detail="Файл не найден")
-
-@app.post("/delete_answer/")
-async def delete_answer(request: Request, text: str = Form(...)):
-    file_path = os.path.join(STUDENT_DIRECTORY_PATH, text)
-    if os.path.isfile(file_path):
-        os.remove(file_path)         
-        return RedirectResponse(url="/answers")
-    else:
-        raise HTTPException(status_code=404, detail="Файл не найден")
-    
-@app.get("/upload_zip")
-async def upload_zip(request: Request):
-    try:
-        zip_file = RESULTS_DIRECTORY_PATH + "/results.zip"
-        with zipfile.ZipFile(zip_file, "w") as myzip:
-            files = os.listdir(RESULTS_DIRECTORY_PATH)
-            for file in files:
-                file = RESULTS_DIRECTORY_PATH + '/' + file
-                myzip.write(file)
-
-        return RedirectResponse(url="/results_list")
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-    
+@app.post("/etalons")
 @app.get("/etalons")
 async def get_pased_etalons(request: Request):
     files = os.listdir(ETALON_DIRECTORY_PATH)
@@ -293,6 +171,7 @@ async def get_pased_etalons(request: Request):
             etalons_list.append(parsed_etalon)
     return templates.TemplateResponse(name='etalons.html', context={'request': request, 'heads': etalons_head, 'etalons': etalons_list})
 
+@app.post("/results")
 @app.get("/results")
 async def get_parsed_results(request: Request):
     files = os.listdir(RESULTS_DIRECTORY_PATH)
