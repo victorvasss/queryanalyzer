@@ -6,7 +6,39 @@
     <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
     <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Загрузить</button>
   </form>
-  <table id="res" class="table table-dark table-striped">
+  <div class="card-group row">
+    {% if results_list %}
+    {% for result in results_list %}
+      <div class="col-md-4">
+        <div class="card bg-dark" style="margin:10px; color:rgb(17, 175, 210);">
+          <div class="card-body">
+            {% for el in result %}
+              {% if '/' not in el %}
+                {% if '.' in el %}
+                  <h5 class="card-title">{{ el }}</h5>
+                {% else %}
+                  <p class="card-text">Баллов: {{ el }}</p>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for el in result %}
+              {% if 'download' in el %}
+                <li class="list-group-item bg-dark"><a href="{{ el }}" class="btn btn-toggle align-items-center rounded">Скачать</a></li>
+              {% elif 'delete' in el %}
+                <li class="list-group-item bg-dark"><a href="{{ el }}" class="btn btn-toggle align-items-center rounded">Удалить</a></li>
+              {% endif %}
+            {% endfor %}
+            <li class="list-group-item bg-dark"><a href="{{ el }}" class="btn btn-toggle align-items-center rounded">Посмотреть</a></li>
+          </ul>
+        </div>
+      </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+  <!--table id="res" class="table table-dark table-striped">
     <thead>
     <tr>
       {% if heads %}
@@ -31,37 +63,6 @@
       {% endfor %}
       {% endif %}
     </tbody>
-  </table>
-  <script>
-    new DataTable('#res', {
-      language: {
-        "decimal":        "",
-        "emptyTable":     "Данные в таблице отсутствуют",
-        "info":           "Отображение от _START_ до _END_ _TOTAL_ количества записей",
-        "infoEmpty":      "Отображение от 0 до 0 из 0 записей",
-        "infoFiltered":   "(filtered from _MAX_ total entries)",
-        "infoPostFix":    "",
-        "thousands":      ",",
-        "lengthMenu":     "Показывать записи _MENU_",
-        "loadingRecords": "Загрузка...",
-        "processing":     "",
-        "search":         "Поиск:",
-        "zeroRecords":    "Совпадающих записей не найдено",
-        "paginate": {
-            "first":      "Первый",
-            "last":       "Последний",
-            "next":       "Следующий",
-            "previous":   "Предыдущий"
-        },
-        "aria": {
-            "orderable":  "Упорядочивать по этой колонке",
-            "orderableReverse": "Расположить этот столбец в обратном порядке"
-        }
-      }
-    });
-    $(document).ready(function() {
-        $('#res').DataTable();
-    });
-  </script>
+  </table-->
 </div>
 {% endblock content %}

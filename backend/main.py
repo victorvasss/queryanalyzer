@@ -176,13 +176,13 @@ async def get_pased_etalons(request: Request):
 async def get_parsed_results(request: Request):
     files = os.listdir(RESULTS_DIRECTORY_PATH)
     # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-    results_head = ['Имя файла', 'Уровень', 'Количество баллов', 'Скачать', 'Удалить']
     results_list = []
     for file in files:
         with open(RESULTS_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
             parsed_results = [file]
             results = {}
             results = json.load(ref_file)
+            del results['grade']
             del results['checks']
             del results['recommendations']
             for el in results:
@@ -192,7 +192,7 @@ async def get_parsed_results(request: Request):
             file_url = f"/delete_result_via_link/{file}"
             parsed_results.append(file_url)
             results_list.append(parsed_results)
-    return templates.TemplateResponse(name='results_list.html', context={'request': request, 'heads': results_head, 'results_list': results_list})
+    return templates.TemplateResponse(name='results_list.html', context={'request': request, 'results_list': results_list})
         
 @app.get("/delete_etalon_via_link/{filename}")
 async def delete_etalon_via_link(request: Request, filename: str):
