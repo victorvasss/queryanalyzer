@@ -152,7 +152,6 @@ async def download_file(request: Request, filename: str):
 @app.get("/etalons")
 async def get_pased_etalons(request: Request):
     files = os.listdir(ETALON_DIRECTORY_PATH)
-    # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
     etalons_head = ['Эталон', 'Описание', 'Название файла', 'Скачать', 'Удалить']
     etalons_list = []
     for file in files:
@@ -175,24 +174,15 @@ async def get_pased_etalons(request: Request):
 @app.get("/results")
 async def get_parsed_results(request: Request):
     files = os.listdir(RESULTS_DIRECTORY_PATH)
-    # Создаем HTML-страницу со списком файлов и ссылками на их скачивание
-    results_list = []
+    res_arr = []
     for file in files:
+        results = {}
         with open(RESULTS_DIRECTORY_PATH+"/"+file, "r", encoding="utf-8") as ref_file:
-            parsed_results = [file]
-            results = {}
             results = json.load(ref_file)
-            del results['grade']
-            del results['checks']
-            del results['recommendations']
-            for el in results:
-                parsed_results.append(str(results[el]))
-            file_url = f"/download_result/{file}"
-            parsed_results.append(file_url)
-            file_url = f"/delete_result_via_link/{file}"
-            parsed_results.append(file_url)
-            results_list.append(parsed_results)
-    return templates.TemplateResponse(name='results_list.html', context={'request': request, 'results_list': results_list})
+            file_url_download = f"/download_result/{file}"
+            file_url_delete = f"/delete_result_via_link/{file}"
+            res_arr.append([file.split('.')[0], results, file_url_download, file_url_delete])
+    return templates.TemplateResponse(name='results_list.html', context={'request': request, 'results': res_arr})
         
 @app.get("/delete_etalon_via_link/{filename}")
 async def delete_etalon_via_link(request: Request, filename: str):
