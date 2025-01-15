@@ -4,8 +4,10 @@
   <h2 style="color:rgb(17, 175, 210)">Загрузить эталоны</h2>
   <form style="padding-bottom:10px;" action="/upload_etalon" method="post" enctype="multipart/form-data">
       <input style="margin-bottom: 10px;" class="btn btn-outline-info" type="file" name="file" required>
+      <select id="schema-dropdown" style="margin-bottom: 10px;" class="btn btn-outline-info" name="dropdown" required></select>
       <button style="margin-bottom: 10px;" class="btn btn-outline-info" type="submit">Загрузить</button>
   </form>
+  
   <table id="res" class="table table-dark table-striped">
     <thead>
     <tr>
@@ -24,7 +26,11 @@
             {% if '/' not in el %}
               <td><p style="color:rgb(159, 204, 214)">{{ el }}</p></td>
             {% else %}
-              <td><a href="{{ el }}" class="btn btn-toggle align-items-center rounded">BTN</a></td>
+              {% if 'download' in el %}
+                <td><a href="{{ el }}" class="btn btn-toggle align-items-center rounded"><i class="fas fa-download"></i></a></td>
+              {% else %}
+                <td><a href="{{ el }}" class="btn btn-toggle align-items-center rounded"><i class="fas fa-trash-alt"></i></a></td>
+              {% endif %}
             {% endif %}
           {% endfor %}
         </tr>
@@ -32,6 +38,7 @@
       {% endif %}
     </tbody>
   </table>
+  
   <script>
     new DataTable('#res', {
       language: {
@@ -59,8 +66,21 @@
         }
       }
     });
-    $(document).ready(function() {
-        $('#res').DataTable();
+
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('/get_db_names')
+        .then(response => response.json())
+        .then(data => {
+          const dropdown = document.getElementById('schema-dropdown');
+          dropdown.innerHTML = "";
+          data.forEach(schema => {
+            const option = document.createElement('option');
+            option.value = schema;
+            option.textContent = schema;
+            dropdown.appendChild(option);
+          });
+        })
+        .catch(error => console.error('Error fetching schema names:', error));
     });
   </script>
 </div>

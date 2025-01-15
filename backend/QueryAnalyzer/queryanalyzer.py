@@ -4,9 +4,10 @@ import time
 import json
 import os
 import re
+from collections import Counter
 
 DB_PARAMS = {
-    "dbname": "course_work",
+    "dbname": "postgres",
     "user": "postgres",
     "password": "237148",
     "host": "localhost",
@@ -22,7 +23,7 @@ def extract_tables_and_columns(query):
     columns = [column.strip() for column in columns]
     return tables, columns
 
-def analyze(filename: str, reference_filename: str):
+def analyze(filename: str, reference_filename: str, dbname: str):
     import json
     from decimal import Decimal
     import sqlparse
@@ -47,6 +48,7 @@ def analyze(filename: str, reference_filename: str):
     }
 
     try:
+        DB_PARAMS["dbname"] = dbname
         conn = psycopg2.connect(**DB_PARAMS)
         cursor = conn.cursor()
 
@@ -83,7 +85,9 @@ def analyze(filename: str, reference_filename: str):
                     nulls_in_result = sum(1 for row in query_result for cell in row if cell is None)
                     nulls_check = nulls_in_reference == nulls_in_result
                     completeness_check = len(set(reference_result)) == len(set(query_result))
-                    duplicates_check = len(query_result) == len(set(query_result))
+                    reference_counts = Counter(reference_result)
+                    query_counts = Counter(query_result)
+                    duplicates_check = reference_counts == query_counts
 
                     if completeness_check:
                         query_score += 1

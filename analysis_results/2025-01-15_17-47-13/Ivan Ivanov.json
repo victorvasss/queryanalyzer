@@ -1,0 +1,174 @@
+{
+    "grade": "Executed",
+    "recommendations": [],
+    "total_score": 4,
+    "checks": [
+        {
+            "description": "Получение списка всех клиентов с их именами и электронной почтой.",
+            "user_query": "SELECT name FROM Products WHERE price > 100;",
+            "reference_query": "SELECT * FROM Categories;",
+            "completeness": false,
+            "duplicates": false,
+            "nulls_match": false,
+            "tables_match": false,
+            "columns_match": false,
+            "score": 0,
+            "recommendations": [
+                "Таблицы или столбцы не совпадают с эталоном. Проверьте FROM и SELECT."
+            ],
+            "query_result": [
+                [
+                    "Smartphone"
+                ],
+                [
+                    "Laptop"
+                ]
+            ],
+            "reference_result": [
+                [
+                    1,
+                    "Electronics"
+                ],
+                [
+                    2,
+                    "Books"
+                ],
+                [
+                    3,
+                    "Clothing"
+                ],
+                [
+                    4,
+                    "Home"
+                ],
+                [
+                    5,
+                    "Beauty"
+                ]
+            ]
+        },
+        {
+            "description": "Получение списка всех клиентов с их именами и электронной почтой.",
+            "user_query": "SELECT name FROM Categories;",
+            "reference_query": "SELECT name FROM Categories;",
+            "completeness": true,
+            "duplicates": true,
+            "nulls_match": true,
+            "tables_match": true,
+            "columns_match": true,
+            "score": 3,
+            "recommendations": [],
+            "query_result": [
+                [
+                    "Electronics"
+                ],
+                [
+                    "Books"
+                ],
+                [
+                    "Clothing"
+                ],
+                [
+                    "Home"
+                ],
+                [
+                    "Beauty"
+                ]
+            ],
+            "reference_result": [
+                [
+                    "Electronics"
+                ],
+                [
+                    "Books"
+                ],
+                [
+                    "Clothing"
+                ],
+                [
+                    "Home"
+                ],
+                [
+                    "Beauty"
+                ]
+            ]
+        },
+        {
+            "description": "Получение списка товаров, стоимость которых превышает 100.",
+            "user_query": "SELECT name FROM Products WHERE category_id IS NOT NULL ORDER BY price DESC LIMIT 3;",
+            "reference_query": "SELECT name FROM Products WHERE price > 100;",
+            "completeness": false,
+            "duplicates": false,
+            "nulls_match": true,
+            "tables_match": true,
+            "columns_match": true,
+            "score": 1,
+            "recommendations": [
+                "Запрос возвращает не полный набор данных. Проверьте условия WHERE или LIMIT.",
+                "В запросе обнаружены проблемы с дубликатами. Убедитесь, что используется DISTINCT, если нужно."
+            ],
+            "query_result": [
+                [
+                    "Laptop"
+                ],
+                [
+                    "Smartphone"
+                ],
+                [
+                    "Blender"
+                ]
+            ],
+            "reference_result": [
+                [
+                    "Smartphone"
+                ],
+                [
+                    "Laptop"
+                ]
+            ]
+        },
+        {
+            "description": "Получение топ-3 самых дорогих товаров, у которых указана категория.",
+            "user_query": "SELECT category_id, AVG(price) AS avg_price FROM Products GROUP BY category_id;",
+            "reference_query": "SELECT name FROM Products WHERE category_id IS NOT NULL ORDER BY price DESC LIMIT 3;",
+            "completeness": false,
+            "duplicates": false,
+            "nulls_match": false,
+            "tables_match": true,
+            "columns_match": false,
+            "score": 0,
+            "recommendations": [
+                "Таблицы или столбцы не совпадают с эталоном. Проверьте FROM и SELECT."
+            ],
+            "query_result": [
+                [
+                    3,
+                    19.99
+                ],
+                [
+                    4,
+                    89.99
+                ],
+                [
+                    2,
+                    14.99
+                ],
+                [
+                    1,
+                    849.99
+                ]
+            ],
+            "reference_result": [
+                [
+                    "Laptop"
+                ],
+                [
+                    "Smartphone"
+                ],
+                [
+                    "Blender"
+                ]
+            ]
+        }
+    ]
+}
