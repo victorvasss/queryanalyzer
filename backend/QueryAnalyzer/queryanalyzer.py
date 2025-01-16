@@ -9,7 +9,7 @@ from collections import Counter
 DB_PARAMS = {
     "dbname": "postgres",
     "user": "postgres",
-    "password": "237148",
+    "password": "010716",
     "host": "localhost",
     "port": "5432",
     "options": "-c search_path=public"
@@ -30,16 +30,15 @@ def analyze(filename: str, reference_filename: str, dbname: str):
 
     def convert_decimal(obj):
         if isinstance(obj, Decimal):
-            return float(obj)  # Преобразуем Decimal в float
+            return float(obj)
         raise TypeError("Object of type Decimal is not JSON serializable")
 
     with open(filename, "r", encoding="utf-8") as file:
-        sql_content = file.read()
+        sql_content = file.readlines()
 
     with open(reference_filename, "r", encoding="utf-8") as ref_file:
         reference_data = json.load(ref_file)
 
-    user_queries = sqlparse.split(sql_content)
     analyzed_data = {
         "grade": "Executed",
         "recommendations": [],
@@ -52,7 +51,7 @@ def analyze(filename: str, reference_filename: str, dbname: str):
         conn = psycopg2.connect(**DB_PARAMS)
         cursor = conn.cursor()
 
-        for user_query, (ref_query, description) in zip(user_queries, reference_data.items()):
+        for idx, (user_query, (ref_query, description)) in enumerate(zip(sql_content, reference_data.items()), start=1):
             user_query = user_query.strip()
 
             query_score = 0
@@ -65,11 +64,10 @@ def analyze(filename: str, reference_filename: str, dbname: str):
                 cursor.execute(user_query)
                 query_result = cursor.fetchall()
 
-                completeness_check = False
-                duplicates_check = False
-                nulls_check = False
-                # nulls_in_reference = 0
-                # nulls_in_result = 0
+                completeness_check = len(set(reference_result)) == len(set(query_result))
+                reference_counts = Counter(reference_result)
+                query_counts = Counter(query_result)
+                duplicates_check = reference_counts == query_counts
 
                 ref_tables, ref_columns = extract_tables_and_columns(ref_query)
                 user_tables, user_columns = extract_tables_and_columns(user_query)
@@ -77,32 +75,30 @@ def analyze(filename: str, reference_filename: str, dbname: str):
                 tables_match = sorted(ref_tables) == sorted(user_tables)
                 columns_match = sorted(ref_columns) == sorted(user_columns)
 
-                if not tables_match or not columns_match:
-                    query_score = 0
-                    recommendations.append("Таблицы или столбцы не совпадают с эталоном. Проверьте FROM и SELECT.")
-                else:
-                    nulls_in_reference = sum(1 for row in reference_result for cell in row if cell is None)
-                    nulls_in_result = sum(1 for row in query_result for cell in row if cell is None)
-                    nulls_check = nulls_in_reference == nulls_in_result
-                    completeness_check = len(set(reference_result)) == len(set(query_result))
-                    reference_counts = Counter(reference_result)
-                    query_counts = Counter(query_result)
-                    duplicates_check = reference_counts == query_counts
+                nulls_in_reference = sum(1 for row in reference_result for cell in row if cell is None)
+                nulls_in_result = sum(1 for row in query_result for cell in row if cell is None)
+                nulls_check = nulls_in_reference == nulls_in_result
 
+                if tables_match and columns_match:
                     if completeness_check:
                         query_score += 1
                     else:
-                        recommendations.append("Запрос возвращает не полный набор данных. Проверьте условия WHERE или LIMIT.")
+                        recommendations.append(
+                            "Запрос возвращает не полный набор данных. Проверьте условия WHERE или LIMIT.")
 
                     if duplicates_check:
                         query_score += 1
                     else:
-                        recommendations.append("В запросе обнаружены проблемы с дубликатами. Убедитесь, что используется DISTINCT, если нужно.")
+                        recommendations.append(
+                            "В запросе обнаружены проблемы с дубликатами. Убедитесь, что используется DISTINCT, если нужно.")
 
                     if nulls_check:
                         query_score += 1
                     else:
-                        recommendations.append("Число NULL-значений не совпадает. Проверьте, правильно ли обрабатываются отсутствующие значения.")
+                        recommendations.append(
+                            "Число NULL-значений не совпадает. Проверьте, правильно ли обрабатываются отсутствующие значения.")
+                else:
+                    recommendations.append("Таблицы или столбцы не совпадают с эталоном. Проверьте FROM и SELECT.")
 
                 check_result = {
                     "description": description,
@@ -123,9 +119,16 @@ def analyze(filename: str, reference_filename: str, dbname: str):
                 analyzed_data["total_score"] += query_score
 
             except Exception as query_error:
-                analyzed_data["recommendations"].append(
-                    f"Error executing query: {query_error} for {description}"
-                )
+                conn.rollback()
+                error_message = f"Error in query #{idx}: {query_error}"
+                analyzed_data["checks"].append({
+                    "description": description,
+                    "user_query": user_query,
+                    "reference_query": ref_query,
+                    "error": error_message
+                })
+                analyzed_data["recommendations"].append(error_message)
+                print(f"[!] {error_message}")
 
         cursor.close()
         conn.close()
