@@ -42,14 +42,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                       </div>
                       <div class="modal-body">
-                        <div class="card-group row">
+                        <div class="row d-flex flex-row flex-nowrap overflow-auto">
                           {% for result in results[i][1]['checks'] %}
-                          <div class="card bg-dark" style="margin:10px; color:rgb(17, 175, 210);">
-                            <div class="card-body d-flex flex-column align-items-start" style="height:35%;">
+                          <div class="card card-block bg-dark" style="margin:10px; color:rgb(17, 175, 210); width: 350px; border-color: white;">
+                            <div class="card-body d-flex flex-column align-items-start">
                               <h5 class="card-title">{{ result['description'] }}</h5>
                               <p class="card-text">{{ result['user_query'] }}</p>
                             </div>
-                            <ul class="list-group list-group-flush" style="height:65%;">
+                            <ul class="list-group list-group-flush" style="min-height: 50px;">
                               <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Баллов:          {{ result['score'] }}</li>
                               <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Полнота:         {{ result['completeness'] }}</li>
                               <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Учет дубликатов: {{ result['duplicates'] }}</li>
