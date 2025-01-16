@@ -9,7 +9,7 @@ from collections import Counter
 DB_PARAMS = {
     "dbname": "postgres",
     "user": "postgres",
-    "password": "010716",
+    "password": "237148",
     "host": "localhost",
     "port": "5432",
     "options": "-c search_path=public"

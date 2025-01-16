@@ -50,11 +50,15 @@
                               <p class="card-text">{{ result['user_query'] }}</p>
                             </div>
                             <ul class="list-group list-group-flush" style="height:65%;">
-                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Баллов:       {{ result['score'] }}</li>
-                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Полнота:      {{ result['completeness'] }}</li>
-                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Дубликаты:    {{ result['duplicates'] }}</li>
-                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Учет NULL'ов: {{ result['nulls_match'] }}</li>
-                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Рекомендации: {{ result['recommendations'] }}</li>
+                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Баллов:          {{ result['score'] }}</li>
+                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Полнота:         {{ result['completeness'] }}</li>
+                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Учет дубликатов: {{ result['duplicates'] }}</li>
+                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Учет NULL'ов:    {{ result['nulls_match'] }}</li>
+                              {% if result['recommendations'] == NULL %}
+                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Рекомендации:    ['Ошибка в синтаксисе запроса.']</li>
+                              {% else %}
+                              <li class="list-group-item bg-dark" style="color:rgb(17, 175, 210)">Рекомендации:    {{ result['recommendations'] }}</li>
+                              {% endif %}
                             </ul>
                           </div>
                           {% endfor %}
